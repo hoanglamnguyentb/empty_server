@@ -1,6 +1,9 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
+using WebApi.Models.Auth;
+using WebApi.Models.Common;
 
 namespace WebApi.Controllers
 {
@@ -31,11 +34,24 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var result = await _signInManager.PasswordSignInAsync(email, password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(
+                   request.Email,
+                   request.Password,
+                   false,
+                   false
+               );
 
-            return result.Succeeded ? Ok("Login success") : BadRequest("Invalid login");
+            if (!result.Succeeded)
+                return BadRequest(ApiResponse<string>.Fail("Invalid login"));
+
+            var data = new LoginData
+            {
+                Email = request.Email
+            };
+
+            return Ok(ApiResponse<LoginData>.Ok(data, "Login success"));
         }
     }
 }
