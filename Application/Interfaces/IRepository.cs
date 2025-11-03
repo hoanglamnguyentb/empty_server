@@ -16,7 +16,7 @@ namespace Application.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
 
-        // optional if muốn linh hoạt
+        // optional
         Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
     }
 }
