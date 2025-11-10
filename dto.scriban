@@ -1,0 +1,8 @@
+namespace Application.Dtos
+{
+    public class {{ name }}Dto
+    {
+        public {{ idType }} Id { get; set; }
+        // TODO: add fields manually
+    }
+}

@@ -14,11 +14,18 @@ namespace Infrastructure.Persistence.Repositories
     {
         public MenuRepository(AppDbContext context) : base(context) { }
 
-        public async Task<List<Menu>> GetMenusByPermissionCodesAsync(List<string> permissionCodes)
+        public async Task<List<Menu>> GetTreeAsync()
         {
-            return await _dbSet
-                .Where(m => permissionCodes.Contains(m.PermissionCode))
-                .ToListAsync();
+            var menus = await _dbSet.OrderBy(m => m.SortOrder).ToListAsync();
+
+            var lookup = menus.ToLookup(m => m.ParentId);
+
+            foreach (var menu in menus)
+            {
+                menu.Children = lookup[menu.Id].ToList();
+            }
+
+            return lookup[null].ToList();
         }
     }
 }

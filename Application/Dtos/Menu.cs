@@ -1,13 +1,12 @@
-﻿using Domain.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.Dtos
 {
-    public class Menu : BaseEntity
+    public class CreateMenuRequest
     {
         public string? Name { get; set; }
         public string? Code { get; set; }
@@ -16,10 +15,10 @@ namespace Domain.Entities
         public int? ParentId { get; set; }
         public int SortOrder { get; set; }
         public bool IsActive { get; set; }
-        public Menu? Parent { get; set; }
-        public ICollection<Menu>? Children { get; set; }
-
-        //public ICollection<RolePermission> RolePermissions { get; set; }
     }
 
+    public class UpdateMenuRequest : CreateMenuRequest
+    {
+        public int Id { get; set; }
+    }
 }

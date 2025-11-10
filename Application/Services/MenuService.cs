@@ -11,14 +11,42 @@ namespace Application.Services
 {
     public class MenuService
     {
-        private readonly IMenuRepository _menuRepo;
+        private readonly IMenuRepository _repo;
 
-        public MenuService(IMenuRepository menuRepo)
+        public MenuService(IMenuRepository repo)
         {
-            _menuRepo = menuRepo;
+            _repo = repo;
         }
 
-        public Task<List<Menu>> GetMenusByPermissions(List<string> codes)
-            => _menuRepo.GetMenusByPermissionCodesAsync(codes);
+        public async Task<List<Menu>> GetAllAsync()
+            => await _repo.GetAllAsync();
+
+        public async Task<List<Menu>> GetTreeAsync()
+            => await _repo.GetTreeAsync();
+
+        public async Task<Menu?> GetByIdAsync(int id)
+            => await _repo.GetByIdAsync(id);
+
+        public async Task<Menu> CreateAsync(Menu menu)
+        {
+            await _repo.AddAsync(menu);
+            return menu;
+        }
+
+        public async Task<Menu> UpdateAsync(Menu menu)
+        {
+            await _repo.UpdateAsync(menu);
+            return menu;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var menu = await _repo.GetByIdAsync(id);
+            if (menu == null) return false;
+
+            await _repo.DeleteAsync(menu);
+            return true;
+        }
     }
+
 }

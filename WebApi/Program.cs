@@ -1,10 +1,7 @@
-using Application;
-using Application.Interfaces;
-using Application.Services;
+﻿using Application;
 using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Data;
-using Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,29 +10,24 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Controllers & Swagger
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//AppDbContext
+// DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+// Identity (bắt buộc để UserManager hoạt động)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+// XÓA dòng này vì bạn đã khai báo Authentication bên dưới với JWT
+// builder.Services.AddAuthentication();
 
-//DI
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
-
-//CORS
+// CORS
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 builder.Services.AddCors(options =>
 {
@@ -49,7 +41,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-// JWT
+// JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
@@ -73,11 +65,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Authorization
+builder.Services.AddAuthorization();
+
+// DI Application & Infrastructure
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
+
 var app = builder.Build();
 
 app.UseCors("CustomCorsPolicy");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -86,6 +84,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// BẮT BUỘC: Authentication phải đi trước Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

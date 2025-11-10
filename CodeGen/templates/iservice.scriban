@@ -1,0 +1,13 @@
+using Application.Dtos;
+
+namespace Application.Interfaces.Services
+{
+    public interface I{{ name }}Service
+    {
+        Task<List<{{ name }}Dto>> GetAllAsync();
+        Task<{{ name }}Dto?> GetByIdAsync({{ idType }} id);
+        Task<{{ idType }}> CreateAsync({{ name }}Dto dto);
+        Task<bool> UpdateAsync({{ idType }} id, {{ name }}Dto dto);
+        Task<bool> DeleteAsync({{ idType }} id);
+    }
+}

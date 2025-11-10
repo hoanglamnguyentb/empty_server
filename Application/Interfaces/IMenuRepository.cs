@@ -9,6 +9,6 @@ namespace Application.Interfaces
 {
     public interface IMenuRepository : IRepository<Menu>
     {
-        Task<List<Menu>> GetMenusByPermissionCodesAsync(List<string> permissionCodes);
+        Task<List<Menu>> GetTreeAsync();
     }
 }

@@ -1,0 +1,11 @@
+{
+  "outputPaths": {
+    "dto": "../Application/Dtos",
+    "irepository": "../Application/Interfaces/Repositories",
+    "repository": "../Infrastructure/Persistence/Repositories",
+    "iservice": "../Application/Interfaces/Services",
+    "service": "../Application/Services",
+    "controller": "../WebApi/Controllers"
+  },
+  "defaultIdType": "guid"
+}

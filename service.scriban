@@ -1,0 +1,59 @@
+using Application.Dtos;
+using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Domain.Entities;
+
+namespace Application.Services
+{
+    public class {{ name }}Service : I{{ name }}Service
+    {
+        private readonly I{{ name }}Repository _repo;
+
+        public {{ name }}Service(I{{ name }}Repository repo)
+        {
+            _repo = repo;
+        }
+
+        public async Task<List<{{ name }}Dto>> GetAllAsync()
+        {
+            var list = await _repo.GetAllAsync();
+            return list.Select(x => new {{ name }}Dto
+            {
+                Id = x.Id
+            }).ToList();
+        }
+
+        public async Task<{{ name }}Dto?> GetByIdAsync({{ idType }} id)
+        {
+            var x = await _repo.GetByIdAsync(id);
+            if (x == null) return null;
+
+            return new {{ name }}Dto { Id = x.Id };
+        }
+
+        public async Task<{{ idType }}> CreateAsync({{ name }}Dto dto)
+        {
+            var e = new {{ name }}();
+            await _repo.AddAsync(e);
+            return e.Id;
+        }
+
+        public async Task<bool> UpdateAsync({{ idType }} id, {{ name }}Dto dto)
+        {
+            var e = await _repo.GetByIdAsync(id);
+            if (e == null) return false;
+
+            await _repo.UpdateAsync(e);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync({{ idType }} id)
+        {
+            var e = await _repo.GetByIdAsync(id);
+            if (e == null) return false;
+
+            await _repo.DeleteAsync(e);
+            return true;
+        }
+    }
+}

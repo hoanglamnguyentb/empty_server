@@ -1,0 +1,10 @@
+{
+  "paths": {
+    "applicationDtos": "../Application/Dtos",
+    "applicationInterfaces": "../Application/Interfaces",
+    "applicationServices": "../Application/Services",
+    "infrastructureRepositories": "../Infrastructure/Persistence/Repositories",
+    "webapiControllers": "../WebApi/Controllers",
+    "domainEntities": "../Domain/Entities"
+  }
+}
